@@ -11,6 +11,7 @@ using liveChat.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using liveChat.HubConfig;
 
 namespace liveChat
 {
@@ -30,11 +31,12 @@ namespace liveChat
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
-                    builder => builder.WithOrigins("http://localhost:62086")
+                    builder => builder.WithOrigins("http://localhost:44372")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials());
             });
+            services.AddSignalR();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
@@ -81,6 +83,10 @@ namespace liveChat
 
             // for signalR
             app.UseCors("CorsPolicy");
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<MessageHub>("/messageHub");
+            });
 
             app.UseMvc(routes =>
             {
