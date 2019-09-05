@@ -10,7 +10,6 @@ import { HomeComponent } from './home/home.component';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
-import { MessageModule } from './message/message.module';
 
 @NgModule({
   declarations: [
@@ -26,8 +25,7 @@ import { MessageModule } from './message/message.module';
     RouterModule.forRoot([
       {
         path: 'home',
-        // loadChildren: () => import('./message/message.module').then(m => m.MessageModule),
-        component: HomeComponent,
+        loadChildren: () => import('./message/message.module').then(m => m.MessageModule),
         pathMatch: 'full'
       },
       {
@@ -35,8 +33,7 @@ import { MessageModule } from './message/message.module';
         redirectTo: 'home',
         pathMatch: 'full'
       }
-    ]),
-    MessageModule
+    ])
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }
